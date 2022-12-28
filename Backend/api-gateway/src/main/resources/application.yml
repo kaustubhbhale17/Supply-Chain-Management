@@ -1,0 +1,78 @@
+server:
+  port: 9025
+
+spring:
+  application:
+    name: API-GATEWAY
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service_url:
+      default:zone: http://localhost:8761/eureka
+    instance:
+      hostname: localhost
+
+#api-configuration for one service, change routing as per your services
+#cloud:
+#  gateway:
+#    routes:
+#      - id: ADMIN-SERVICE
+#        uri: lb://ADMIN-SERVICE
+#        predicates:
+#          - PATH=/admin/**
+#        filters:
+#          - name: CircuitBreaker
+#            args:
+#              name: ADMIN-SERVICE
+#              fallbackUri: forward:/adminServiceFallback
+
+
+cloud:
+  gateway:
+    routes:
+      - id: SUPPLIER-SERVICE
+        uri: lb://SUPPLIER-SERVICE
+        predicates:
+          - PATH=/supplier/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: SUPPLIER-SERVICE
+              fallbackUri: forward:/supplierServiceFallback
+
+      - id: ORDER-SERVICE
+        uri: lb://ORDER-SERVICE
+        predicates:
+          - PATH=/order/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: ORDER-SERVICE
+              fallbackUri: forward:/orderServiceFallback
+
+      - id: INVENTORY-SERVICE
+        uri: lb://INVENTORY-SERVICE
+        predicates:
+            - PATH=/inventory/**
+        filters:
+            - name: CircuitBreaker
+              args:
+                name: INVENTORY-SERVICE
+                fallbackUri: forward:/inventoryServiceFallback
+
+      - id: RETAILER-SERVICE
+        uri: lb://RETAILER-SERVICE
+        predicates:
+          - PATH=/retailer/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: RETAILER-SERVICE
+              fallbackUri: forward:/retailerServiceFallback
+
+
+
+
+
